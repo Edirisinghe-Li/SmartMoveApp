@@ -1,35 +1,70 @@
 import React, { useState } from "react";
 import './LoginRegister.css';
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // for redirecting
 
 const LoginRegister = () => {
-    
     const [action, setAction] = useState('');
+    const [loginData, setLoginData] = useState({ username: '', password: '' });
+    const [registerData, setRegisterData] = useState({ username: '', email: '', password: '' });
+    const navigate = useNavigate();
 
-    const registerLink = () => {
-        setAction('active');
+    const registerLink = () => setAction('active');
+    const loginLink = () => setAction('');
+
+    // Handle login
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:7108/api/auth/login', loginData);
+            alert(response.data); // "Login successful"
+            navigate('/dashboard'); // redirect to Dashboard
+        } catch (error) {
+            alert(error.response?.data || 'Login failed');
+        }
     };
 
-    const loginLink = () => {
-        setAction('');
+    // Handle registration
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:7108/api/auth/register', registerData);
+            alert(response.data); // "Registration successful"
+            setAction(''); // Switch to login form
+        } catch (error) {
+            alert(error.response?.data || 'Registration failed');
+        }
     };
-
 
     return (
         <div className="content">
             <div className={`wrapper ${action}`}>
                 <div className="form-box login">
-                    <form action="" className="form">
+                    <form className="form" onSubmit={handleLogin}>
                         <h1>Login</h1>
                         <div className="input-box">
-                            <input type="text" placeholder="Username" required/><FaUser className="icon"/>
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                required
+                                value={loginData.username}
+                                onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                            />
+                            <FaUser className="icon" />
                         </div>
                         <div className="input-box">
-                            <input type="password" placeholder="Password" required/><FaLock className="icon"/>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                required
+                                value={loginData.password}
+                                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                            />
+                            <FaLock className="icon" />
                         </div>
                         <div className="remember-forgot">
-                            <label><input type="checkbox"/>Remember me</label>
+                            <label><input type="checkbox" />Remember me</label>
                             <a href="#">Forgot password?</a>
                         </div>
                         <button type="submit">Login</button>
@@ -39,20 +74,41 @@ const LoginRegister = () => {
                     </form>
                 </div>
 
-            <div className="form-box register">
-                    <form action="" className="form">
+                <div className="form-box register">
+                    <form className="form" onSubmit={handleRegister}>
                         <h1>Register</h1>
                         <div className="input-box">
-                            <input type="text" placeholder="Username" required/><FaUser className="icon"/>
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                required
+                                value={registerData.username}
+                                onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
+                            />
+                            <FaUser className="icon" />
                         </div>
                         <div className="input-box">
-                            <input type="text" placeholder="Email" required/><FaEnvelope className="icon"/>
+                            <input
+                                type="text"
+                                placeholder="Email"
+                                required
+                                value={registerData.email}
+                                onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                            />
+                            <FaEnvelope className="icon" />
                         </div>
                         <div className="input-box">
-                            <input type="password" placeholder="Password" required/><FaLock className="icon"/>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                required
+                                value={registerData.password}
+                                onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                            />
+                            <FaLock className="icon" />
                         </div>
                         <div className="remember-forgot">
-                            <label><input type="checkbox"/>I agree to the terms & conditions</label>
+                            <label><input type="checkbox" />I agree to the terms & conditions</label>
                         </div>
                         <button type="submit">Register</button>
                         <div className="register-link">
@@ -60,10 +116,10 @@ const LoginRegister = () => {
                         </div>
                     </form>
                 </div>
-                
             </div>
         </div>
     );
 };
 
 export default LoginRegister;
+
