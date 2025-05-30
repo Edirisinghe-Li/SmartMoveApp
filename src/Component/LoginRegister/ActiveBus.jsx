@@ -1,4 +1,5 @@
 import React from 'react'
+import './ActiveBus.css';
 
 const ActiveBus = () => {
   return (

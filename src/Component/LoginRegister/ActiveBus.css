@@ -1,0 +1,20 @@
+.active-bus-container {
+    position: relative;
+    width: 350px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 16px;
+    padding: 15px;
+    background-color: rgba(19, 26, 216, 0.2);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.active-bus-container p {
+    font-size: 12px;
+}
