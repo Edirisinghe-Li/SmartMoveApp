@@ -34,7 +34,7 @@
     right: 0;
 }
 
-@media only screen and (max-width:1300px) {
+@media only screen and (max-width:900px) {
     .container-dashboard {
         flex-direction: column;
         justify-content: center;

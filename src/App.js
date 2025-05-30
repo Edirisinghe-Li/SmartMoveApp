@@ -1,6 +1,8 @@
+import React from 'react';
 import './App.css';
 import NavBar from './Component/LoginRegister/NavBar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Home from './Pages/home';
 import Login from './Pages/login';
 import Dashboard from './Pages/dashboard';
@@ -11,14 +13,14 @@ function App() {
   return (
     <Router>
       <NavBar />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Parent Dashboard Route */}
+        {/* Dashboard with nested profile routes */}
         <Route path="/dashboard" element={<Dashboard />}>
-          {/* Nested Routes */}
           <Route path="user-profile" element={<UserProfile />} />
           <Route path="admin-profile" element={<AdminProfile />} />
         </Route>
@@ -28,4 +30,3 @@ function App() {
 }
 
 export default App;
-

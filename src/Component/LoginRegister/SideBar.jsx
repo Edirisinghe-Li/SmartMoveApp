@@ -17,50 +17,51 @@ const SideBar = () => {
   };
 
   return (
-    <div className='sidebar-content'>
-      <div className='sidebar-container'>
+    <div className="sidebar-content">
+      <div className="sidebar-container">
 
-        {/* Profile with Submenu */}
-        <div className='nav-option optional' onClick={toggleProfileSubmenu}>
-          <FaUserCircle className='icon' />
-          <span className='nav-link'>Profile</span>
+        {/* Profile Dropdown */}
+        <div className="nav-option optional" onClick={toggleProfileSubmenu}>
+          <FaUserCircle className="icon" />
+          <span className="nav-link">Profile</span>
           {profileOpen ? <IoIosArrowUp className="arrow-icon" /> : <IoIosArrowDown className="arrow-icon" />}
         </div>
+
         {profileOpen && (
-          <div className='submenu'>
-            <Link to="/user-profile" className='submenu-link'>User</Link>
-            <Link to="/admin-profile" className='submenu-link'>Admin</Link>
+          <div className="submenu">
+            <Link to="/dashboard/user-profile" className="submenu-link">User</Link>
+            <Link to="/dashboard/admin-profile" className="submenu-link">Admin</Link>
           </div>
         )}
 
-        {/* Other Menu Items */}
-        <div className='nav-option optional'>
-          <MdDashboardCustomize className='icon' />
-          <Link to="/dashboard" className='nav-link'>Dashboard</Link>
+        {/* Other Links */}
+        <div className="nav-option optional">
+          <MdDashboardCustomize className="icon" />
+          <Link to="/dashboard" className="nav-link">Dashboard</Link>
         </div>
-        <div className='nav-option optional'>
-          <FaLocationDot className='icon' />
-          <Link to="/tracking" className='nav-link'>Tracking</Link>
+        <div className="nav-option optional">
+          <FaLocationDot className="icon" />
+          <Link to="/tracking" className="nav-link">Tracking</Link>
         </div>
-        <div className='nav-option optional'>
-          <MdBusAlert className='icon' />
-          <Link to="/alerts" className='nav-link'>Alerts</Link>
+        <div className="nav-option optional">
+          <MdBusAlert className="icon" />
+          <Link to="/alerts" className="nav-link">Alerts</Link>
         </div>
-        <div className='nav-option optional'>
-          <MdAssistant className='icon' />
-          <Link to="/ai-tools" className='nav-link'>AI Tools</Link>
+        <div className="nav-option optional">
+          <MdAssistant className="icon" />
+          <Link to="/ai-tools" className="nav-link">AI Tools</Link>
         </div>
-        <div className='nav-option optional'>
-          <HiDocumentReport className='icon' />
-          <Link to="/reports" className='nav-link'>Reports</Link>
+        <div className="nav-option optional">
+          <HiDocumentReport className="icon" />
+          <Link to="/reports" className="nav-link">Reports</Link>
         </div>
-        <div className='nav-option optional'>
-          <IoSettings className='icon' />
-          <Link to="/settings" className='nav-link'>Settings</Link>
+        <div className="nav-option optional">
+          <IoSettings className="icon" />
+          <Link to="/settings" className="nav-link">Settings</Link>
         </div>
-        <div className='nav-option optional'>
-          <IoMdHelpCircle className='icon' />
-          <Link to="/help" className='nav-link'>Help</Link>
+        <div className="nav-option optional">
+          <IoMdHelpCircle className="icon" />
+          <Link to="/help" className="nav-link">Help</Link>
         </div>
       </div>
     </div>
