@@ -40,19 +40,47 @@ const paginationModel = { page: 0, pageSize: 5 };
 const Alert = () => {
   return (
     <div className='alert-container'>
-        <h4>Total Alert Send</h4>
-        <Paper sx={{ height: 280, width: '100%', margin: 1 }}>
+      <h4 style={{ color: 'white' }}>Total Alert Send</h4>
+      <Paper elevation={0} sx={{ height: 280, width: '100%', margin: 1, backgroundColor: 'transparent' }}>
         <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{ pagination: { paginationModel } }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-            sx={{ border: 0 }}
-        />
-        </Paper>
-    </div>
-  )
-}
+          rows={rows}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{
+            border: 0,
+            color: 'white',
+            backgroundColor: 'transparent',
 
-export default Alert
+            '.MuiDataGrid-columnHeaders': {
+              backgroundColor: 'transparent',
+              color: 'white',
+            },
+            '.MuiDataGrid-cell': {
+              color: 'white',
+              backgroundColor: 'transparent',
+            },
+            '.MuiDataGrid-footerContainer': {
+              backgroundColor: 'transparent',
+              color: 'white',
+            },
+            '.MuiCheckbox-root': {
+              color: 'white',
+            },
+            '.MuiTablePagination-root': {
+              color: 'white',
+            },
+            '.MuiDataGrid-row:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            }
+          }}
+        />
+      </Paper>
+    </div>
+  );
+};
+
+export default Alert;
+
+
