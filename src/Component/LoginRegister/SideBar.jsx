@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { MdDashboardCustomize, MdBusAlert, MdAssistant } from "react-icons/md";
-import { FaUserCircle, FaLocationArrow } from "react-icons/fa"; // Replaced FaLocationDot with FaLocationArrow for compatibility
+import { FaUserCircle, FaLocationArrow } from "react-icons/fa";
 import { HiDocumentReport } from "react-icons/hi";
 import { IoSettings } from "react-icons/io5";
 import { IoMdHelpCircle } from "react-icons/io";
@@ -15,9 +15,10 @@ const SideBar = () => {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    const storedRole = localStorage.getItem("role");
-    if (storedRole) {
-      setRole(storedRole.trim().toLowerCase());
+    // ✅ Get role from user object in localStorage (not just raw "role" key)
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData?.role) {
+      setRole(userData.role); // Use exact casing ("Admin" / "User")
     }
   }, []);
 
@@ -30,7 +31,13 @@ const SideBar = () => {
       <div className="sidebar-container">
 
         {/* Profile Dropdown */}
-        <div className="nav-option optional" onClick={toggleProfileSubmenu} role="button" tabIndex={0} onKeyPress={toggleProfileSubmenu}>
+        <div
+          className="nav-option optional"
+          onClick={toggleProfileSubmenu}
+          role="button"
+          tabIndex={0}
+          onKeyPress={toggleProfileSubmenu}
+        >
           <FaUserCircle className="icon" />
           <span className="nav-link">Profile</span>
           {profileOpen ? <IoIosArrowUp className="arrow-icon" /> : <IoIosArrowDown className="arrow-icon" />}
@@ -38,10 +45,16 @@ const SideBar = () => {
 
         {profileOpen && (
           <div className="submenu">
-            {role === "admin" && (
-              <Link to="/dashboard/admin-profile" className="submenu-link">Admin</Link>
+            {/* ✅ Admin sees both links */}
+            {role === "Admin" && (
+              <>
+                <Link to="/dashboard/user-profile" className="submenu-link">User</Link>
+                <Link to="/dashboard/admin-profile" className="submenu-link">Admin</Link>
+              </>
             )}
-            {role === "user" && (
+
+            {/* ✅ User sees only their profile */}
+            {role === "User" && (
               <Link to="/dashboard/user-profile" className="submenu-link">User</Link>
             )}
           </div>
@@ -82,11 +95,11 @@ const SideBar = () => {
           <IoMdHelpCircle className="icon" />
           <span className="nav-link">Help</span>
         </Link>
-
       </div>
     </div>
   );
 };
 
 export default SideBar;
+
 

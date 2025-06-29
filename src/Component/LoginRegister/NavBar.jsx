@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./NavBar.css";
 import { FaBars, FaTimes, FaBus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,41 +11,13 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
+import { useAuth } from "../../Context/AuthContext"; // Import the hook
+
 const NavBar = () => {
+  const { user, setUser } = useAuth(); // Get user from context
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [username, setUsername] = useState("");
-  const [role, setRole] = useState("");
   const navRef = useRef();
   const navigate = useNavigate();
-
-  // Load user info on mount and when localStorage changes in other tabs
-  useEffect(() => {
-    const loadUserFromStorage = () => {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        try {
-          const user = JSON.parse(storedUser);
-          setUsername(user.username || "");
-          setRole(user.role || "");
-        } catch (error) {
-          console.error("Error parsing user from localStorage:", error);
-          setUsername("");
-          setRole("");
-        }
-      } else {
-        setUsername("");
-        setRole("");
-      }
-    };
-
-    loadUserFromStorage();
-
-    // Listen for changes to localStorage (login/logout from other tabs)
-    window.addEventListener("storage", loadUserFromStorage);
-
-    // Cleanup listener on unmount
-    return () => window.removeEventListener("storage", loadUserFromStorage);
-  }, []);
 
   const showNavbar = () => {
     navRef.current.classList.toggle("responsive_nav");
@@ -60,12 +32,12 @@ const NavBar = () => {
   };
 
   const handleLogout = () => {
+    // Clear user info in localStorage and context
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    setUser(null); // Update context
     handleCloseUserMenu();
     navigate("/login");
-    // Reload after navigation and menu close
-    setTimeout(() => window.location.reload(), 100);
   };
 
   return (
@@ -80,14 +52,16 @@ const NavBar = () => {
         <Link to="/dashboard" className="nav-links">Dashboard</Link>
         <Link to="/#" className="nav-links">Contact</Link>
 
-        {!username && <Link to="/login" className="nav-links">Login</Link>}
+        {!user && (
+          <Link to="/login" className="nav-links">Login</Link>
+        )}
 
-        {username && (
+        {user && (
           <Box sx={{ flexGrow: 0, ml: 2 }}>
             <Tooltip title="User Menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={username.toUpperCase()}>
-                  {username.charAt(0).toUpperCase()}
+                <Avatar alt={user.username.toUpperCase()}>
+                  {user.username.charAt(0).toUpperCase()}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -103,17 +77,17 @@ const NavBar = () => {
             >
               <MenuItem disabled>
                 <Typography textAlign="center">
-                  Logged in as: <strong>{username}</strong>
+                  Logged in as: <strong>{user.username}</strong>
                 </Typography>
               </MenuItem>
               <MenuItem disabled>
                 <Typography textAlign="center">
-                  Role: <strong>{role}</strong>
+                  Role: <strong>{user.role}</strong>
                 </Typography>
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  const path = role === "Admin" ? "admin-profile" : "user-profile";
+                  const path = user.role === "Admin" ? "admin-profile" : "user-profile";
                   navigate(`/dashboard/${path}`);
                   handleCloseUserMenu();
                 }}
@@ -140,4 +114,5 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
 

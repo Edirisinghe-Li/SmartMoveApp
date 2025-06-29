@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import NavBar from './Component/LoginRegister/NavBar';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './Pages/home';
 import Login from './Pages/login';
@@ -10,6 +10,7 @@ import UserProfile from './Pages/UserProfile';
 import AdminProfile from './Pages/AdminProfile';
 import Unauthorized from './Pages/Unauthorized';
 import ProtectedRoute from './Component/ProtectedRoute';
+import RoleRedirect from './Pages/RoleRedirect';
 
 function App() {
   return (
@@ -32,15 +33,8 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Default fallback: Redirect based on role */}
-          <Route
-            index
-            element={
-              localStorage.getItem("role") === "Admin"
-                ? <Navigate to="admin-profile" />
-                : <Navigate to="user-profile" />
-            }
-          />
+          {/* Default fallback: redirect to role-based dashboard */}
+          <Route index element={<RoleRedirect />} />
 
           {/* Role-specific profile pages */}
           <Route
@@ -66,6 +60,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

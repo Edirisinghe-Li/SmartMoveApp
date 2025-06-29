@@ -3,6 +3,7 @@ import './LoginRegister.css';
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 
 const LoginRegister = () => {
   const [action, setAction] = useState('');
@@ -15,8 +16,8 @@ const LoginRegister = () => {
   });
 
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
-  // Use key to force React to remount forms and reset any browser autofill
   const loginFormKey = action === '' ? 'login' : 'login-hidden';
   const registerFormKey = action === 'active' ? 'register' : 'register-hidden';
 
@@ -26,6 +27,7 @@ const LoginRegister = () => {
     setLoginData({ username: '', password: '' });
     setRegisterData({ username: '', email: '', password: '', role: 'User' });
   };
+
   const loginLink = (e) => {
     e.preventDefault();
     setAction('');
@@ -39,18 +41,19 @@ const LoginRegister = () => {
       const response = await axios.post('https://localhost:7108/api/auth/login', loginData);
       const userData = response.data;
 
+      // Store values in localStorage
       localStorage.setItem("token", userData.token);
-      localStorage.setItem("user", JSON.stringify({
-        username: userData.username,
-        role: userData.role
-      }));
+      localStorage.setItem("role", userData.role); // ✅ store role separately for sidebar
+      localStorage.setItem("user", JSON.stringify({ username: userData.username, role: userData.role }));
+
+      // Update context
+      setUser({ username: userData.username, role: userData.role });
 
       alert(userData.message || "Login successful");
 
       setLoginData({ username: '', password: '' });
 
-      navigate("/dashboard");
-      window.location.reload();
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       const message = error.response?.data?.message || "Login failed. Please try again.";
       alert(message);
@@ -94,9 +97,7 @@ const LoginRegister = () => {
               <input
                 type="text"
                 placeholder="Username"
-                name="login-username"
-                autoComplete="Off"
-                spellCheck={false}
+                autocomplete="off"
                 required
                 value={loginData.username}
                 onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
@@ -107,8 +108,7 @@ const LoginRegister = () => {
               <input
                 type="password"
                 placeholder="Password"
-                name="login-password"
-                autoComplete="Off"
+                autocomplete="off"
                 required
                 value={loginData.password}
                 onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
@@ -121,9 +121,7 @@ const LoginRegister = () => {
             </div>
             <button type="submit">Login</button>
             <div className="register-link">
-              <p>Don't have an account?{" "}
-                <a href="#" onClick={registerLink}>Register</a>
-              </p>
+              <p>Don't have an account? <a href="#" onClick={registerLink}>Register</a></p>
             </div>
           </form>
         </div>
@@ -136,9 +134,7 @@ const LoginRegister = () => {
               <input
                 type="text"
                 placeholder="Username"
-                name="register-username"
-                autoComplete="username"
-                spellCheck={false}
+                autocomplete="off"
                 required
                 value={registerData.username}
                 onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
@@ -149,9 +145,6 @@ const LoginRegister = () => {
               <input
                 type="email"
                 placeholder="Email"
-                name="register-email"
-                autoComplete="email"
-                spellCheck={false}
                 required
                 value={registerData.email}
                 onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
@@ -162,8 +155,7 @@ const LoginRegister = () => {
               <input
                 type="password"
                 placeholder="Password"
-                name="register-password"
-                autoComplete="new-password"
+                autocomplete="off"
                 required
                 value={registerData.password}
                 onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
@@ -189,9 +181,7 @@ const LoginRegister = () => {
             </div>
             <button type="submit">Register</button>
             <div className="register-link">
-              <p>Already have an account?{" "}
-                <a href="#" onClick={loginLink}>Login</a>
-              </p>
+              <p>Already have an account? <a href="#" onClick={loginLink}>Login</a></p>
             </div>
           </form>
         </div>
@@ -201,4 +191,5 @@ const LoginRegister = () => {
 };
 
 export default LoginRegister;
+
 
